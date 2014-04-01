@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <style type="text/css">
+    body {
+    	font-size: 14px;
+    }
+    .parameters { width:100%; border:0; border-collapse:collapse }
+	.parameters th,
+	.parameters td { border:1px solid #c5c5c5; padding:5px; background-color:#fff; color:#000 }
+	.parameters th { background:#D9D9D9 !important; border-color:#d9d9d9 !important }
+	.parameters .parameter { font-family:Fixed, monospace }
+	.parameters ul li {line-height: 25px;}
+    </style>
+</head>
+<body>
+	<table class="parameters" style='margin-bottom: 2em;'>
+		<caption align="left">表1--jQuery UI Portlet 插件API</caption>
+		<tr>
+			<th>参数</th>
+			<th>描述</th>
+			<th>默认值</th>
+			<th>返回值</th>
+		</tr>
+		<tr>
+			<td>sortable</td>
+			<td>是否启用拖动功能，内部调用sortable插件</td>
+			<td>true</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>singleView</td>
+			<td>是否开启单视图模式，双击标题栏可启用单视图模式</td>
+			<td>true</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>create</td>
+			<td>当创建portlet组件时被调用</td>
+			<td>null</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>removeItem</td>
+			<td>关闭一个portlet时的回调函数</td>
+			<td>null</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/colspan.html">columns</a>
+			</td>
+			<td>见表2</td>
+			<td>null</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/drag-events.html">events</a>
+			</td>
+			<td>拖动事件：在回调function中可以获取this（被拖动的单个portlet）对象
+<pre>
+drag: {
+    start: function( event, ui ) {// 拖动开始},
+    stop: function( event, ui ) {// 拖动结束},
+    over: function( event, ui ) {// 拖动过程中停止（此时未结束拖动事件，也就是stop还未触发）}
+}
+</pre>
+			</td>
+			<td>没有默认事件</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/dynamic-add.html">filterRepeat（v1.3）</a>
+			</td>
+			<td>是否开启重复对象的过滤，例如同一个ID的Portlet只允许创建一次；如果该属性设置为true则拦截，如果同时指定了handleRepeat属性则调用</td>
+			<td>false</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><a href="demo/dynamic-add.html">handleRepeat（v1.3）</a></td>
+			<td>
+				和filterRepeat属性配合使用，如果filterRepeat属性为true该函数将被调用；并要求返回true或者false，
+				返回值为true时允许创建重复的Portlet，否则不允许。
+			</td>
+			<td>null</td>
+			<td>true|false</td>
+		</tr>
+	</table>
+
+	<table class="parameters" style='margin-bottom: 2em;'>
+		<caption align="left">表2--jQuery UI Portlet 插件API--columns</caption>
+		<tr>
+			<th>参数</th>
+			<th>描述</th>
+			<th>默认值</th>
+		</tr>
+		<tr>
+			<td>width</td>
+			<td>宽度</td>
+			<td>300</td>
+		</tr>
+		<tr>
+			<td>portlets</td>
+			<td colspan="2">
+				<table class="parameters">
+					<tr>
+						<th>参数</th>
+						<th>描述</th>
+						<th>默认值</th>
+						<th>返回值</th>
+					</tr>
+					<tr>
+						<td>attrs</td>
+						<td>portlet的属性， json数组格式</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>title</td>
+						<td>portlet的title，支持：静态文本，function</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>icon</td>
+						<td>标题栏左侧的图标，使用jQuery UI提供的图标. icon: 'ui-icon-person'</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>beforeCreate(v1.3)</td>
+						<td>创建Portlet元素时调用，该function需要返回一个boolean值，true允许创建，false不允许</td>
+						<td>&nbsp;</td>
+						<td>true|false</td>
+					</tr>
+					<tr>
+						<td>afterCreated(v1.3)</td>
+						<td>创建Portlet元素后</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>beforeRemove(v1.3)</td>
+						<td>删除一个Portlet元素时，该function需要返回一个boolean值，true允许创建，false不允许</td>
+						<td>&nbsp;</td>
+						<td>true|false</td>
+					</tr>
+					<tr>
+						<td>afterLoadContent(v1.3)</td>
+						<td>内容载入完成后</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>beforeRefresh</td>
+						<td>刷新portlet之前被调用</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>afterRefresh</td>
+						<td>刷新portlet之后被调用</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>singleView</td>
+						<td>
+							<ul>
+								<li><b>width:</b>启用单视图模式时portlet的宽度；设置方式：数字、function；默认：body的宽度</li>
+								<li><b>height:</b>启用单视图模式时portlet的高度；设置方式：数字、function；默认：使用原高度</li>
+								<li><b>enable:</b>触发单视图模式后回调</li>
+								<li><b>recovery:</b>关闭（还原）单视图模式后回调</li>
+							</ul>
+						</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>content</td>
+						<td>
+							<ul>
+								<li><b>type:</b>内容获取方式：text、ajax</li>
+								<li><b>text:</b>portlet的内容，html或者function</li>
+								<li><b>style:</b>设置内容区域的样式，目前支持属性：<b>height</b></li>
+								<li><b>beforeShow:</b>设置内容之前被调用</li>
+								<li><b>afterShow:</b>设置内容之后被调用</li>
+								<li><b>url:</b>当type:'ajax'时需要指定数据来源的网址</li>
+								<li><b>dataType:</b>当type:'ajax'时需要指定获取的数据类型，所有jquery的ajax支持的数据类型，目前支持：html、json</li>
+								<li><b>formatter:</b>当type:'ajax'并且dataType:'json'时被调用，用来处理json数据从而转换为html。<br/>调用时传入三个参数：[表1中的参数，本表中的参数, 数据]</li>
+								<li><b>error:</b>当ajax请求出现错误时调用，参数参考jqueyr的api，this对象为当前的内容区域</li>
+							</ul>
+						</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>scripts</td>
+						<td>数组：指定portlet加载完内容后的js文件路径</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+
+	<table class="parameters" style='margin-bottom: 2em;'>
+		<caption align="left">表3--jQuery UI Portlet 插件更新参数&nbsp;$('#portlet1').portlet('option', 'paramName', paramValue)</caption>
+		<tr>
+			<th>参数名称</th>
+			<th>描述</th>
+		</tr>
+		<tr>
+			<td width="120">
+				<a href="demo/disable-drag.html">sortable</a>
+			</td>
+			<td>
+				设置开启/禁用拖动功能
+				<pre>$('#portlet-demo').portlet('option', 'sortable', false);</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/dynamic-add.html">remove（v1.3）</a>
+			</td>
+			<td>
+				删除一个Portlet，下面的代码表示删除ID为feeds的Portlet
+				<pre>$('#portlet-demo').portlet('option', 'remove', '#feeds');</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/dynamic-add.html">filterRepeat（v1.3）</a>
+			</td>
+			<td>
+				获取或者设置filterRepeat属性。
+				下面的代码将返回filterRepeat的值：
+				<pre>$('#portlet-demo').portlet('option', 'filterRepeat');</pre>
+				下面的代码将更改filterRepeat的值：
+				<pre>$('#portlet-demo').portlet('option', 'filterRepeat', true);</pre>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/dynamic-add.html">add(v1.3）</a>
+			</td>
+			<td>
+				动态添加一个Portlet元素，需要传递两个参数:
+				<hr>
+				<dl>
+					<dt>position</dt>
+					<dd>
+						<p><strong>x</strong>：横坐标（所在列的行数），可以是数字也可以是字符（last:表示末尾）</p>
+						<p><strong>y</strong>：纵坐标（哪一列）</p>
+					</dd>
+				</dl>
+				<hr>
+				<pre>
+$('#portlet-demo').portlet('option', 'add', {
+    position: {
+	x: 0,
+	y: 1
+    },
+    portlet: {
+        attrs: {
+            id: 'news'
+        },
+        title: 'News（亲，我是被动态添加的呦）',
+        afterCreated: function() {
+            alert('动态创建了News。。。');
+        },
+        content: {
+            style: {
+                height: '100'
+            },
+            type: 'text',
+            text: function() {
+                return $('#newsTemplate').html();
+            }
+        }
+    }
+});
+				</pre>
+			</td>
+		</tr>
+	</table>
+
+	<table class="parameters" style='margin-bottom: 2em;'>
+		<caption align="left">表4--jQuery UI Portlet 插件方法&nbsp;$('#portlet1').portlet('method_name')</caption>
+		<tr>
+			<th>方法名称</th>
+			<th>描述</th>
+			<th>结果或用法</th>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/getindexs.html">index</a>
+			</td>
+			<td>获取每一个portlet的XY坐标</td>
+			<td>
+				<pre>
+var indexs = $('#portlet-demo').portlet('index');
+
+{
+	news: {
+		x: 0,
+		y: 3
+	}
+}
+				</pre>
+				表示ID为news的portlet在第一列第4行
+			</td>
+		</tr>
+		<tr>
+			<td>destroy</td>
+			<td>销毁</td>
+			<td>
+				<pre>$('#aaa').portlet('destroy');</pre>
+			</td>
+		</tr>
+		<tr>
+			<td><a href="demo/toggle.html">toggle</a></td>
+			<td>
+				切换<b>单个</b>portlet的显示，如果没有传入参数默认使用<b>toggle</b>，如果传入了参数[hide, show]则执行单个动画。
+			</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>
+				<a href="demo/toggle.html">toggleAll</a>
+			</td>
+			<td>
+				切换<b>全部</b>portlet的显示，如果没有传入参数默认使用<b>toggle</b>，如果传入了参数[hide, show]则执行单个动画。
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</body>
+</html>

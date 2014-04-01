@@ -24,3 +24,5 @@ _testmain.go
 
 
 go-easy-portal
+*_flymake.css
+data.db

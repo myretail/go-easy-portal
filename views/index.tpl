@@ -69,7 +69,7 @@
             <li><a href='#' class="api" rel="static/jquery-ui-portlet/api.html">插件API</a></li>
             <li><a href='#' class="source-github" rel="static/jquery-ui-portlet/demo/source-on-github.html">插件源码</a></li>
             <li class='ui-state-highlight'><a href='#' rel="#">==插件演示==</a></li>
-            <li><a href='#' rel="static/jquery-ui-portlet/demo/mix.html">综合演示</a></li>
+            <li><a href='#' rel="static/easy-portal/mix.html">综合演示</a></li>
             <li><a href='#' rel="static/jquery-ui-portlet/demo/fixed-height.html">固定高度</a></li>
             <li><a href='#' rel="static/jquery-ui-portlet/demo/disable-drag.html">禁止拖动</a></li>
             <li><a href='#' rel="static/jquery-ui-portlet/demo/single-view.html">单视图模式</a></li>
@@ -81,12 +81,12 @@
             <li><a href='#' rel="static/jquery-ui-portlet/demo/drag-events.html">拖动事件</a></li>
             <li><a href='#' class="new" title="动态添加、删除portlet元素" rel="static/jquery-ui-portlet/demo/dynamic-add.html">动态增删（v1.3）</a></li>
             <li><a href='#' class="new" rel="static/jquery-ui-portlet/demo/v1.3-new-events.html">新事件(v1.3)</a></li>
-            <li class='ui-state-highlight'><a href='#' class="chat" rel="static/jquery-ui-portlet/talk.html">讨论插件</a></li>
+            <li><a href='#' class="new" rel="static/easy-portal/d3demo1.html">D3</a></li>
         </ul>
     </div>
     <div id="RightPane" class="ui-layout-center ui-helper-reset ui-widget-content">
-        <iframe id="mainFrame" src="static/jquery-ui-portlet/talk.html" frameborder="0"></iframe>
+        <iframe id="mainFrame" src="static/easy-portal/mix.html" frameborder="0"></iframe>
     </div>
-    <script src="http://s96.cnzz.com/stat.php?id=2566493&web_id=2566493&show=pic" language="JavaScript"></script>
+
 </body>
 </html>

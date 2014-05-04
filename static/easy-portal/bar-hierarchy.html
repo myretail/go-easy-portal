@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)http://mbostock.github.io/d3/talk/20111116/bar-hierarchy.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link type="text/css" rel="stylesheet" href="./bar-hierarchy_files/style.css">
+    <style type="text/css">
+
+svg {
+  font-size: 14px;
+}
+
+rect.background {
+  fill: none;
+  pointer-events: all;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+    </style>
+  </head>
+  <body ryt13150="1">
+    <h2>
+      Flare code size<br>
+      hierarchical bar chart
+    </h2>
+    <script type="text/javascript" src="./bar-hierarchy_files/d3.js"></script>
+    <script type="text/javascript" src="./bar-hierarchy_files/d3.layout.js"></script>
+    <script type="text/javascript">
+
+var m = [80, 160, 0, 160], // top right bottom left
+    w = 1280 - m[1] - m[3], // width
+    h = 800 - m[0] - m[2], // height
+    x = d3.scale.linear().range([0, w]),
+    y = 25, // bar height
+    z = d3.scale.ordinal().range(["steelblue", "#aaa"]); // bar color
+
+var hierarchy = d3.layout.partition()
+    .value(function(d) { return d.size; });
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("top");
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+svg.append("svg:rect")
+    .attr("class", "background")
+    .attr("width", w)
+    .attr("height", h)
+    .on("click", up);
+
+svg.append("svg:g")
+    .attr("class", "x axis");
+
+svg.append("svg:g")
+    .attr("class", "y axis")
+  .append("svg:line")
+    .attr("y1", "100%");
+
+d3.json("flare.json", function(root) {
+  hierarchy.nodes(root);
+  x.domain([0, root.value]).nice();
+  down(root, 0);
+});
+
+function down(d, i) {
+  if (!d.children || this.__transition__) return;
+  var duration = d3.event && d3.event.altKey ? 7500 : 750,
+      delay = duration / d.children.length;
+
+  // Mark any currently-displayed bars as exiting.
+  var exit = svg.selectAll(".enter").attr("class", "exit");
+
+  // Entering nodes immediately obscure the clicked-on bar, so hide it.
+  exit.selectAll("rect").filter(function(p) { return p === d; })
+      .style("fill-opacity", 1e-6);
+
+  // Enter the new bars for the clicked-on data.
+  // Per above, entering bars are immediately visible.
+  var enter = bar(d)
+      .attr("transform", stack(i))
+      .style("opacity", 1);
+
+  // Have the text fade-in, even though the bars are visible.
+  // Color the bars as parents; they will fade to children if appropriate.
+  enter.select("text").style("fill-opacity", 1e-6);
+  enter.select("rect").style("fill", z(true));
+
+  // Update the x-scale domain.
+  x.domain([0, d3.max(d.children, function(d) { return d.value; })]).nice();
+
+  // Update the x-axis.
+  svg.selectAll(".x.axis").transition()
+      .duration(duration)
+      .call(xAxis);
+
+  // Transition entering bars to their new position.
+  var enterTransition = enter.transition()
+      .duration(duration)
+      .delay(function(d, i) { return i * delay; })
+      .attr("transform", function(d, i) { return "translate(0," + y * i * 1.2 + ")"; });
+
+  // Transition entering text.
+  enterTransition.select("text").style("fill-opacity", 1);
+
+  // Transition entering rects to the new x-scale.
+  enterTransition.select("rect")
+      .attr("width", function(d) { return x(d.value); })
+      .style("fill", function(d) { return z(!!d.children); });
+
+  // Transition exiting bars to fade out.
+  var exitTransition = exit.transition()
+      .duration(duration)
+      .style("opacity", 1e-6)
+      .remove();
+
+  // Transition exiting bars to the new x-scale.
+  exitTransition.selectAll("rect").attr("width", function(d) { return x(d.value); });
+
+  // Rebind the current node to the background.
+  svg.select(".background").data([d]).transition().duration(duration * 2); d.index = i;
+}
+
+function up(d) {
+  if (!d.parent || this.__transition__) return;
+  var duration = d3.event && d3.event.altKey ? 7500 : 750,
+      delay = duration / d.children.length;
+
+  // Mark any currently-displayed bars as exiting.
+  var exit = svg.selectAll(".enter").attr("class", "exit");
+
+  // Enter the new bars for the clicked-on data's parent.
+  var enter = bar(d.parent)
+      .attr("transform", function(d, i) { return "translate(0," + y * i * 1.2 + ")"; })
+      .style("opacity", 1e-6);
+
+  // Color the bars as appropriate.
+  // Exiting nodes will obscure the parent bar, so hide it.
+  enter.select("rect")
+      .style("fill", function(d) { return z(!!d.children); })
+    .filter(function(p) { return p === d; })
+      .style("fill-opacity", 1e-6);
+
+  // Update the x-scale domain.
+  x.domain([0, d3.max(d.parent.children, function(d) { return d.value; })]).nice();
+
+  // Update the x-axis.
+  svg.selectAll(".x.axis").transition()
+      .duration(duration * 2)
+      .call(xAxis);
+
+  // Transition entering bars to fade in over the full duration.
+  var enterTransition = enter.transition()
+      .duration(duration * 2)
+      .style("opacity", 1);
+
+  // Transition entering rects to the new x-scale.
+  // When the entering parent rect is done, make it visible!
+  enterTransition.select("rect")
+      .attr("width", function(d) { return x(d.value); })
+      .each("end", function(p) { if (p === d) d3.select(this).style("fill-opacity", null); });
+
+  // Transition exiting bars to the parent's position.
+  var exitTransition = exit.selectAll("g").transition()
+      .duration(duration)
+      .delay(function(d, i) { return i * delay; })
+      .attr("transform", stack(d.index));
+
+  // Transition exiting text to fade out.
+  exitTransition.select("text")
+      .style("fill-opacity", 1e-6);
+
+  // Transition exiting rects to the new scale and fade to parent color.
+  exitTransition.select("rect")
+      .attr("width", function(d) { return x(d.value); })
+      .style("fill", z(true));
+
+  // Remove exiting nodes when the last child has finished transitioning.
+  exit.transition().duration(duration * 2).remove();
+
+  // Rebind the current parent to the background.
+  svg.select(".background").data([d.parent]).transition().duration(duration * 2);
+}
+
+// Creates a set of bars for the given data node, at the specified index.
+function bar(d) {
+  var bar = svg.insert("svg:g", ".y.axis")
+      .attr("class", "enter")
+      .attr("transform", "translate(0,5)")
+    .selectAll("g")
+      .data(d.children)
+    .enter().append("svg:g")
+      .style("cursor", function(d) { return !d.children ? null : "pointer"; })
+      .on("click", down);
+
+  bar.append("svg:text")
+      .attr("x", -6)
+      .attr("y", y / 2)
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .text(function(d) { return d.name; });
+
+  bar.append("svg:rect")
+      .attr("width", function(d) { return x(d.value); })
+      .attr("height", y);
+
+  return bar;
+}
+
+// A stateful closure for stacking bars horizontally.
+function stack(i) {
+  var x0 = 0;
+  return function(d) {
+    var tx = "translate(" + x0 + "," + y * i * 1.2 + ")";
+    x0 += x(d.value);
+    return tx;
+  };
+}
+
+    </script><svg width="1280" height="800"><g transform="translate(160,80)"><rect class="background" width="960" height="720"></rect><g class="x axis"><g transform="translate(0,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">0</text></g><g transform="translate(95.99999999999999,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">50,000</text></g><g transform="translate(191.99999999999997,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">100,000</text></g><g transform="translate(288,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">150,000</text></g><g transform="translate(383.99999999999994,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">200,000</text></g><g transform="translate(480,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">250,000</text></g><g transform="translate(576,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">300,000</text></g><g transform="translate(672,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">350,000</text></g><g transform="translate(767.9999999999999,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">400,000</text></g><g transform="translate(863.9999999999999,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">450,000</text></g><g transform="translate(960,0)" style="opacity: 1;"><line class="tick" y2="-6" x2="0"></line><text text-anchor="middle" dy="0em" y="-9" x="0">500,000</text></g><path class="domain" d="M0,-6V0H960V-6"></path></g><g class="enter" transform="translate(0,5)"><g transform="translate(0,0)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">vis</text><rect width="830.6476799999999" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,30)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">util</text><rect width="317.10144" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,60)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">animate</text><rect width="192.04608000000002" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,90)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">query</text><rect width="172.26432" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,120)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">analytics</text><rect width="93.53472" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,150)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">scale</text><rect width="60.08447999999999" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,180)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">data</text><rect width="58.14528" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,210)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">physics</text><rect width="57.473279999999995" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,240)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">display</text><rect width="46.567679999999996" height="25" style="fill: rgb(70, 130, 180);"></rect></g><g transform="translate(0,270)rotate(0)skewX(0)scale(1,1)" style="cursor: pointer; opacity: 1;"><text x="-6" y="12.5" dy=".35em" text-anchor="end" style="fill-opacity: 1;">flex</text><rect width="7.9027199999999995" height="25" style="fill: rgb(70, 130, 180);"></rect></g></g><g class="y axis"><line y1="100%"></line></g></g></svg>
+  
+
+<style type="text/css" id="tqs61y" class="h12me92">
+	.n1mpdz4 {
+			border-radius:2px;
+			box-shadow:0 0 7px rgba(0,0,0,0.4);
+			position:absolute;
+			top:376px;
+			left:404px;
+			margin-bottom:100px;
+			background:#fff;
+			z-index:2147483647;
+			display:none;
+			font:14px/1.5 arial,\5b8b\4f53,sans-serif;
+	}
+	
+	.n1mpdz4 .d15ejcy {}
+
+    .n1mpdz4 .t23uku7 {
+        background:#fff;
+        position:absolute;
+        height:8px;
+		width:8px;
+        margin-left:-3px;
+        -webkit-transform:rotate(45deg);
+		transform:rotate(45deg);
+		left:20%;
+    }
+	
+	.n1mpdz4.l45ez8 .t23uku7 {
+		box-shadow : -1px -1px 2px rgba(0, 0, 0,0.4);
+        top:-5px;    
+	}
+	
+	.n1mpdz4.y24rwl8 .t23uku7 {
+        bottom:-5px;
+		box-shadow : 1px 1px 2px rgba(0, 0, 0,0.4);
+	}
+	
+	.n1mpdz4.k107fwg .t23uku7{
+		left:50%;
+	}
+	
+	.m19qsgu {
+		font-style:normal;
+		font-size:22px;
+		position:relative;
+		top:4px;
+	}
+	
+	.fetfre {
+		width:182px;
+		padding:20px;
+		font-size:14px;
+	}
+	
+	.fetfre .i2565b6 {
+		text-decoration:none;
+		font-size:12px;
+		color:#999;
+		float:right;	
+		position:relative;
+		top:7px;
+	}
+	
+	.d15ejcy {
+		overflow:hidden;
+	}
+	
+	.i2565b6:hover {
+		color:#1e90ff;
+	}
+	
+	.op4d3t {
+			width:120px;
+			height:152px;
+			padding:20px;
+    }
+	.op4d3t .m1dre3g {
+			 margin-bottom:10px;
+    }
+	
+	.op4d3t .d15ejcy span{
+		color:red;
+	}
+</style>
+
+<div class="n1mpdz4 l45ez8 fetfre">
+		<div class="t23uku7"></div>
+		<div class="d15ejcy">
+		同步商品到手机一淘收藏夹，手机购买更优惠！
+		<a class="i2565b6" href="http://mbostock.github.io/d3/talk/20111116/bar-hierarchy.html#">我知道了<i class="m19qsgu">×</i></a>
+	</div>
+</div>
+
+<div class="n1mpdz4 y24rwl8 k107fwg op4d3t">
+		<div class="t23uku7"></div>
+		<div class="d15ejcy">
+			<div class="m1dre3g"></div>
+			<div class="x1iy17z">手机购买省<span>0</span>元</div>
+		</div>
+</div>
+</body></html>

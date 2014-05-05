@@ -1,10 +1,11 @@
 package routers
 
 import (
-	"go-easy-portal/controllers"
-	"github.com/astaxie/beego"
+        "go-easy-portal/controllers"
+        "github.com/astaxie/beego"
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
+        beego.DirectoryIndex=true
+	beego.Router("/", &controllers.MainController{})
 }

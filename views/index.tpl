@@ -61,10 +61,9 @@
     </div>
     <div id="LeftPane" class="ui-layout-west ui-widget ui-widget-content">
         <ul id="menu">
-            <li class='ui-state-default'><a href='#' rel="#">==插件文档==</a></li>
+            <li class='ui-state-default'><a href='#' rel="#">Jquery UI Portlet</a></li>
             <li><a href='#' class="api" rel="static/jquery-ui-portlet/api.html">插件API</a></li>
             <li><a href='#' class="source-github" rel="static/jquery-ui-portlet/demo/source-on-github.html">插件源码</a></li>
-            <li class='ui-state-highlight'><a href='#' rel="#">==插件演示==</a></li>
             <li><a href='#' rel="static/easy-portal/mix.html">综合演示</a></li>
             <li><a href='#' rel="static/jquery-ui-portlet/demo/fixed-height.html">固定高度</a></li>
             <li><a href='#' rel="static/jquery-ui-portlet/demo/disable-drag.html">禁止拖动</a></li>
@@ -77,8 +76,10 @@
             <li><a href='#' rel="static/jquery-ui-portlet/demo/drag-events.html">拖动事件</a></li>
             <li><a href='#' class="new" title="动态添加、删除portlet元素" rel="static/jquery-ui-portlet/demo/dynamic-add.html">动态增删（v1.3）</a></li>
             <li><a href='#' class="new" rel="static/jquery-ui-portlet/demo/v1.3-new-events.html">新事件(v1.3)</a></li>
-            <li><a href='#' rel="static/angular-d3-demo/index.html">Angular D3 demo</a></li>
-            <li><a href='#' rel="static/angular-dashboard-app/dist/index.html">Angular Dashboard</a></li>
+            <li class='ui-state-highlight'><a href='#' rel="#">Angular Dashboard</a></li>
+            <li><a href='#' rel="static/angular-dashboard-app/dist/index.html">Dashboard demo</a></li>
+            <li><a href='#' rel="static/angular-d3-demo/index.html">D3 demo</a></li>
+
         </ul>
     </div>
     <div id="RightPane" class="ui-layout-center ui-helper-reset ui-widget-content">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>jQuery UI Portlet</title>
+    <title>Easy portal with golang</title>
     <!-- jquery 1.4 and jquery ui 1.8 -->
     <link rel="stylesheet" href="static/jquery-ui-portlet/lib/themes/1.10/start/jquery-ui-1.10.2.custom.min.css" />
     <link rel="stylesheet" href="static/jquery-ui-portlet/css/jquery.portlet.css?v=1.3.1" />
@@ -54,14 +54,10 @@
 </head>
 <body>
     <div id="TopPane" class="ui-layout-north ui-widget ui-widget-content ui-state-default" style="text-align:center">
-        <img src="logo-ui.png" style="float:left" height="68" />
-        <h1 style='display:inline;margin-top:5em;'>jQuery UI Portlet</h1>
-        <h4 style='display:inline;margin-left: 1em;'>（Version: 1.3.1） 基于jQuery UI的Portlet插件</h4>
-        <div stle="padding-top:10em;display:block">
-            <br/>
-            <img src="github.png" height="30" alt="" style="vertical-align:middle"/>
-            <a href="https://github.com/henryyan/jquery-ui-portlet" target="_blank" style="font-size:15px;">https://github.com/henryyan/jquery-ui-portlet</a>
-        </div>
+
+        <h1 style='display:inline;margin-top:5em;'>Easy Portlet</h1>
+        <h4 style='display:inline;margin-left: 1em;'></h4>
+
     </div>
     <div id="LeftPane" class="ui-layout-west ui-widget ui-widget-content">
         <ul id="menu">
@@ -81,7 +77,7 @@
             <li><a href='#' rel="static/jquery-ui-portlet/demo/drag-events.html">拖动事件</a></li>
             <li><a href='#' class="new" title="动态添加、删除portlet元素" rel="static/jquery-ui-portlet/demo/dynamic-add.html">动态增删（v1.3）</a></li>
             <li><a href='#' class="new" rel="static/jquery-ui-portlet/demo/v1.3-new-events.html">新事件(v1.3)</a></li>
-            <li><a href='#' class="new" rel="static/easy-portal/d3demo1.html">D3</a></li>
+            <li><a href='#' rel="static/angular-d3-demo/index.html">Angular D3 demo</a></li>
         </ul>
     </div>
     <div id="RightPane" class="ui-layout-center ui-helper-reset ui-widget-content">

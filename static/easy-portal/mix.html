@@ -78,7 +78,7 @@
              }
            }]
          }, {
-           width: 200,
+           width: 350,
            portlets: [{
              title: 'Shopping',
              content: {
@@ -87,6 +87,36 @@
                },
                type: 'text',
                text: 'Shopping contens<br/>Shopping contens<br/>Shopping contens<br/>Shopping contens<br/>'
+             }
+           }, {
+             title: 'Ajax 错误',
+             content: {
+               type: 'ajax',
+               url: 'noexsit.html',
+               error: function() {
+                 $(this).append('<br/><br/>捕获到ajax错误');
+                 // alert('出错了');
+               }
+             }
+           },{
+             title: 'Ajax',
+             content: {
+               type: 'ajax',
+               url: 'ajax.html'
+             }
+           }, {
+             title: 'Ajax Json Datas',
+             content: {
+               type: 'ajax',
+               dataType: 'json',
+               url: 'ajax.json',
+               formatter: function(o, pio, data) {
+                 var ct = "<ul>";
+                 $.each(data, function() {
+                   ct += "<li>" + this.text + "</li>";
+                 });
+                 return ct + "</ul>";
+               }
              }
            }]
          }, {
@@ -114,36 +144,6 @@
              content: {
                type: 'ajax',
                url: 'd3demo3.html'
-             }
-           },{
-             title: 'Ajax',
-             content: {
-               type: 'ajax',
-               url: 'ajax.html'
-             }
-           }, {
-             title: 'Ajax 错误',
-             content: {
-               type: 'ajax',
-               url: 'noexsit.html',
-               error: function() {
-                 $(this).append('<br/><br/>捕获到ajax错误');
-                 // alert('出错了');
-               }
-             }
-           }, {
-             title: 'Ajax Json Datas',
-             content: {
-               type: 'ajax',
-               dataType: 'json',
-               url: 'ajax.json',
-               formatter: function(o, pio, data) {
-                 var ct = "<ul>";
-                 $.each(data, function() {
-                   ct += "<li>" + this.text + "</li>";
-                 });
-                 return ct + "</ul>";
-               }
              }
            }]
          }]

@@ -78,6 +78,7 @@
             <li><a href='#' class="new" title="动态添加、删除portlet元素" rel="static/jquery-ui-portlet/demo/dynamic-add.html">动态增删（v1.3）</a></li>
             <li><a href='#' class="new" rel="static/jquery-ui-portlet/demo/v1.3-new-events.html">新事件(v1.3)</a></li>
             <li><a href='#' rel="static/angular-d3-demo/index.html">Angular D3 demo</a></li>
+            <li><a href='#' rel="static/angular-dashboard-app/dist/index.html">Angular Dashboard</a></li>
         </ul>
     </div>
     <div id="RightPane" class="ui-layout-center ui-helper-reset ui-widget-content">
